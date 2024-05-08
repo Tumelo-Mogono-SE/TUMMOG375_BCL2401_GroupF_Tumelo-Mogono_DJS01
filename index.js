@@ -6,23 +6,26 @@
  */
 
 // Given Parameters
-const velocity = 10000; // velocity (km/h)
-const acceleration = 3; // acceleration (m/s^2)
-const time = 3600; // seconds (1 hour)
-const distance = 0; // distance (km)
-const fuel = 5000; // remaining fuel (kg)
-const fuelBurnRate = 0.5; // fuel burn rate (kg/s)
-
-// Pick up an error with how the function below is called and make it robust to such errors
-const calculateNewVelocity = (velocity, acceleration, time) => { 
-  return velocity + ((acceleration * time) * 3.6)
+const props = {
+ velocity : 10000, // velocity (km/h)
+ acceleration : 3, // acceleration (m/s^2)
+ time : 7200, // seconds (1 hour)
+ distance : 0, // distance (km)
+ fuel : 5000, // remaining fuel (kg)
+ fuelBurnRate : 0.5 // fuel burn rate (kg/s)
 }
 
-const newDistance = distance + (velocity * (time / 3600)) //calcultes new distance
-const remainingFuel = fuel - fuelBurnRate * time //calculates remaining fuel
-const newVelocity = calculateNewVelocity(velocity, acceleration, time) //calculates new velocity based on acceleration
+const conversionRate = 3.6;
+// Pick up an error with how the function below is called and make it robust to such errors
+const calculateNewVelocity = (props) => { 
 
+  const { velocity, acceleration, time } = props
+  return velocity + ((acceleration * time) * conversionRate)
+}
 
+const newDistance = props.distance + (props.velocity * (props.time / 3600)) //calcultes new distance
+const remainingFuel = props.fuel - props.fuelBurnRate * props.time //calculates remaining fuel
+const newVelocity = calculateNewVelocity(props) //calculates new velocity based on acceleration
 
 console.log(`Corrected New Velocity: ${newVelocity} km/h`);
 console.log(`Corrected New Distance: ${newDistance} km`);
