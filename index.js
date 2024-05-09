@@ -33,6 +33,7 @@ const props = {
  } // fuel burn rate (kg/s)
 };
 
+// Variable used to convert values for 
 const conversionRateToKilometersPerHour = 3.6;
 const convertionOfSecondsToHour = 3600;
 
@@ -44,7 +45,7 @@ const calcNewVelocity = (props) => {
   const { velocity : {value: velocityValue, measurement: velocityMeasurement}, acceleration : {value: accelerationValue, measurement: accelerationMeasurement}, time : {value: timeValue, measurement: timeMeasurement} } = props;
 
   if(typeof(velocityValue) !== "number" || velocityValue < 0) throw Error("Positive 'Velocity' number is required!");
-  if(typeof(accelerationValue) !== "number") throw Error("Positive 'acceleration' number is required!");
+  if(typeof(accelerationValue) !== "number" || accelerationValue < 0) throw Error("Positive 'acceleration' number is required!");
   if(timeValue < 0 || typeof(timeValue) !== "number" ) throw Error("Positive 'time' number is required!");
   if(velocityMeasurement !== "km/h") throw Error("Correct 'Velocity' unit of measurement is required. Expected: km/h");
   if(accelerationMeasurement !== "m/s^2") throw Error("Correct 'acceleration' unit of measurement is required. Expected: m/s^2");
