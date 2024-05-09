@@ -7,24 +7,54 @@
 
 // Given Parameters
 const props = {
- velocity : 10000, // velocity (km/h)
- acceleration : 3, // acceleration (m/s^2)
- time : 7200, // seconds (1 hour)
- distance : 0, // distance (km)
- fuel : 5000, // remaining fuel (kg)
- fuelBurnRate : 0.5 // fuel burn rate (kg/s)
+ velocity : {
+    value: "",
+    measurement:"km/h" 
+  },
+ acceleration : {
+    value: 3,
+    measurement: "m/s^2"
+  }, // acceleration (m/s^2)
+ time : {
+    value: 3600,
+    measurement: "seconds" 
+  }, // seconds (1 hour)
+ distance : {
+    value: 0,
+    measurement: "km"
+  }, // distance (km)
+ fuel : {
+    value: 5000,
+    measurement: "kg"
+  }, // remaining fuel (kg)
+ fuelBurnRate : {
+    value: 0.5,
+    measurement: "kg/s"
+ } // fuel burn rate (kg/s)
 }
 
-const conversionRate = 3.6;
+const conversionRateToKilometersPerHour = 3.6;
+
 // Pick up an error with how the function below is called and make it robust to such errors
 const calculateNewVelocity = (props) => { 
 
-  const { velocity, acceleration, time } = props
-  return velocity + ((acceleration * time) * conversionRate)
+  if (!props) throw Error("'Props' is required!");
+
+  const { velocity : {value: velocityValue, measurement: velocityMeasurement}, acceleration : {value: accelerationValue, measurement: accelerationMeasurement}, time : {value: timeValue, measurement: timeMeasurement} } = props;
+
+  if(!velocityValue || isNaN(velocityValue)) throw Error("'Velocity' is required!");
+  if(isNaN(accelerationValue)) throw Error("'acceleration' is required!");
+  if(timeValue < 0 || isNaN(timeValue) ) throw Error("'time' is required!");
+  if(!velocityMeasurement || velocityMeasurement !== "km/h") throw Error("Correct 'Velocity' unit of measurement is required. Expected: km/h");
+  if(!accelerationMeasurement || accelerationMeasurement !== "m/s^2") throw Error("Correct 'acceleration' unit of measurement is required. Expected: m/s^2");
+  if(timeMeasurement !== "seconds" ) throw Error("Correct 'time' unit of measurement is required. Expected: seconds");
+  
+
+  return velocityValue + ((accelerationValue * timeValue) * conversionRateToKilometersPerHour);
 }
 
-const newDistance = props.distance + (props.velocity * (props.time / 3600)) //calcultes new distance
-const remainingFuel = props.fuel - props.fuelBurnRate * props.time //calculates remaining fuel
+const newDistance = props.distance.value + (props.velocity.value * (props.time.value / 3600)) //calcultes new distance
+const remainingFuel = props.fuel.value - props.fuelBurnRate.value * props.time.value //calculates remaining fuel
 const newVelocity = calculateNewVelocity(props) //calculates new velocity based on acceleration
 
 console.log(`Corrected New Velocity: ${newVelocity} km/h`);
