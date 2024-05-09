@@ -8,7 +8,7 @@
 // Given Parameters
 const props = {
  velocity : {
-    value: "",
+    value: 10000,
     measurement:"km/h" 
   },
  acceleration : {
@@ -31,31 +31,64 @@ const props = {
     value: 0.5,
     measurement: "kg/s"
  } // fuel burn rate (kg/s)
-}
+};
 
 const conversionRateToKilometersPerHour = 3.6;
+const convertionOfSecondsToHour = 3600;
 
 // Pick up an error with how the function below is called and make it robust to such errors
-const calculateNewVelocity = (props) => { 
+const calcNewVelocity = (props) => { 
 
   if (!props) throw Error("'Props' is required!");
 
   const { velocity : {value: velocityValue, measurement: velocityMeasurement}, acceleration : {value: accelerationValue, measurement: accelerationMeasurement}, time : {value: timeValue, measurement: timeMeasurement} } = props;
 
-  if(!velocityValue || isNaN(velocityValue)) throw Error("'Velocity' is required!");
-  if(isNaN(accelerationValue)) throw Error("'acceleration' is required!");
-  if(timeValue < 0 || isNaN(timeValue) ) throw Error("'time' is required!");
-  if(!velocityMeasurement || velocityMeasurement !== "km/h") throw Error("Correct 'Velocity' unit of measurement is required. Expected: km/h");
-  if(!accelerationMeasurement || accelerationMeasurement !== "m/s^2") throw Error("Correct 'acceleration' unit of measurement is required. Expected: m/s^2");
+  if(typeof(velocityValue) !== "number" || velocityValue < 0) throw Error("Positive 'Velocity' number is required!");
+  if(typeof(accelerationValue) !== "number") throw Error("Positive 'acceleration' number is required!");
+  if(timeValue < 0 || typeof(timeValue) !== "number" ) throw Error("Positive 'time' number is required!");
+  if(velocityMeasurement !== "km/h") throw Error("Correct 'Velocity' unit of measurement is required. Expected: km/h");
+  if(accelerationMeasurement !== "m/s^2") throw Error("Correct 'acceleration' unit of measurement is required. Expected: m/s^2");
   if(timeMeasurement !== "seconds" ) throw Error("Correct 'time' unit of measurement is required. Expected: seconds");
   
 
   return velocityValue + ((accelerationValue * timeValue) * conversionRateToKilometersPerHour);
-}
+};
 
-const newDistance = props.distance.value + (props.velocity.value * (props.time.value / 3600)) //calcultes new distance
-const remainingFuel = props.fuel.value - props.fuelBurnRate.value * props.time.value //calculates remaining fuel
-const newVelocity = calculateNewVelocity(props) //calculates new velocity based on acceleration
+const calcNewDistance = (props) => {
+
+  if (!props) throw Error("'Props' is required!");
+
+  const { velocity : {value: velocityValue, measurement: velocityMeasurement}, distance : {value: distanceValue, measurement: distanceMeasurement}, time : {value: timeValue, measurement: timeMeasurement} } = props;
+
+  if(velocityValue < 0 || typeof(velocityValue) !== "number") throw Error("Positive 'Velocity' value is required!");
+  if(distanceValue < 0 || typeof(distanceValue) !== "number") throw Error("Positive 'distance' value is required!");
+  if(timeValue < 0 || typeof(timeValue) !== "number" ) throw Error("Positive 'time' value is required!");
+  if(velocityMeasurement !== "km/h") throw Error("Correct 'Velocity' unit of measurement is required. Expected: km/h");
+  if(distanceMeasurement !== "km") throw Error("Correct 'distance' unit of measurement is required. Expected: km");
+  if(timeMeasurement !== "seconds" ) throw Error("Correct 'time' unit of measurement is required. Expected: seconds");
+
+  return distanceValue + (velocityValue * (timeValue / convertionOfSecondsToHour));
+};
+
+const calcRemainingFuel = (props) => {
+
+  if (!props) throw Error("'Props' is required!");
+
+  const { fuel : {value: fuelValue, measurement: fuelMeasurement}, fuelBurnRate : {value: fuelBurnRateValue, measurement: fuelBurnRatenMeasurement}, time : {value: timeValue, measurement: timeMeasurement} } = props;
+
+  if(typeof(fuelValue) !== "number" || fuelValue < 0) throw Error("Positive 'fuel' number is required!");
+  if(typeof(fuelBurnRateValue) !== "number" || fuelBurnRateValue <= 0) throw Error("Positive 'fuelBurnRate' number is required!");
+  if(timeValue < 0 || typeof(timeValue) !== "number" ) throw Error("'time' is required!");
+  if(fuelMeasurement !== "kg") throw Error("Correct 'fuel' unit of measurement is required. Expected: kg");
+  if(fuelBurnRatenMeasurement !== "kg/s") throw Error("Correct 'fuelBurnRate' unit of measurement is required. Expected: kg/s");
+  if(timeMeasurement !== "seconds" ) throw Error("Correct 'time' unit of measurement is required. Expected: seconds");
+
+  return fuelValue - fuelBurnRateValue * timeValue;
+};
+
+const newDistance = calcNewDistance(props) //calcultes new distance
+const remainingFuel = calcRemainingFuel(props) //calculates remaining fuel
+const newVelocity = calcNewVelocity(props) //calculates new velocity based on acceleration
 
 console.log(`Corrected New Velocity: ${newVelocity} km/h`);
 console.log(`Corrected New Distance: ${newDistance} km`);
