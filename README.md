@@ -39,3 +39,5 @@ Figuring out the correct method to use for this challenge to ensure that it comp
 # Feedback
 Due to the LMS problems I had for Monday till Wednesday, I struggle to get through all the material for the module that covered examples of what we need to implement in this project. But I really enjoyed the problem, it showed me the is more ways to solve a problem and I also noticed while working on the challenge, you need to be specific with your code, just because something currently functions doesn't mean it is fine, things can break if someone else works on it and changes things.
 
+
+
