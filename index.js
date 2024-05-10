@@ -6,6 +6,7 @@
  */
 
 // Given Parameters
+// Created an object which will contain the given parameters which each contains the value and the unit of measure.
 const props = {
  velocity : {
     value: 10000,
@@ -38,6 +39,11 @@ const conversionRateToKilometersPerHour = 3.6;
 const convertionOfSecondsToHour = 3600;
 
 // Pick up an error with how the function below is called and make it robust to such errors
+// Using the prop method, I assigned a single parameter which i will use for object destructing to create variable which will contains properties of the object which will be passed as an argument.
+// I then have a condition which checks if the argument is provided.
+// I then have conditions which check that each property/value of the variables is not a number or less than zero which if true they throw an error message.
+// I then have conditions which check that each variables unit of measure is not the correct unit of measure which if true they throw a error message.
+// I then return the calculation for calculating the new velocity by adding the initial velocity with speed in kilometer per hour which is convert from meters per second to kilometer per hour using the conversion variable.
 const calcNewVelocity = (props) => { 
 
   if (!props) throw Error("'Props' is required!");
@@ -55,6 +61,9 @@ const calcNewVelocity = (props) => {
   return velocityValue + ((accelerationValue * timeValue) * conversionRateToKilometersPerHour);
 };
 
+// Same as the function for calculating the new velocity, I used the prop method and used object destructing to create variables from the object
+// Added conditional statements to throw error messages if the values are less than zero and are not numbers and if the unit of measure is not equal to the correct unit of measure.
+// For the return calculation I simply converted the time value to hour using the conversion variable which divides the seconds by 3600 seconds to get an hour, which is the correct unit of measure for calcuations with velocity to cancel out the hour in velocity so that we add to kilometers to get distance.
 const calcNewDistance = (props) => {
 
   if (!props) throw Error("'Props' is required!");
@@ -71,6 +80,8 @@ const calcNewDistance = (props) => {
   return distanceValue + (velocityValue * (timeValue / convertionOfSecondsToHour));
 };
 
+// For this function again i used the prop method to get variables from an object using object destructing and have conditional statements to check if value is not a number or less than zero and ensure the correct unit of measure.
+// For the returned calculation I just substracted the fuelburnrate multiplied by time which removes the seconds to have kilograms from the fuel value which is in kilograms.
 const calcRemainingFuel = (props) => {
 
   if (!props) throw Error("'Props' is required!");
@@ -87,6 +98,7 @@ const calcRemainingFuel = (props) => {
   return fuelValue - fuelBurnRateValue * timeValue;
 };
 
+// I then assigned each calculation function to variable with the object passed as an argument
 const newDistance = calcNewDistance(props) //calcultes new distance
 const remainingFuel = calcRemainingFuel(props) //calculates remaining fuel
 const newVelocity = calcNewVelocity(props) //calculates new velocity based on acceleration
